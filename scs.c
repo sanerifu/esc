@@ -92,17 +92,17 @@ Token lex(EstdString* io_string) {
         default:
             if (isalpha(string.data[0])) {
                 EstdString id = ESTD_STRING(string.data, 0);
-                while (string.length > 0 && isalnum(id.data[id.length])) {
-                    string = ESTD_SLICE(string, 1, string.length);
+                while (id.length < string.length && isalnum(id.data[id.length])) {
                     id.length += 1;
                 }
+                string = ESTD_SLICE(string, id.length, string.length);
                 ret = (Token){.type = TOKEN_ID, .id = id};
             } else if (isdigit(string.data[0])) {
                 EstdString num = ESTD_STRING(string.data, 0);
-                while (string.length > 0 && isdigit(num.data[num.length])) {
-                    string = ESTD_SLICE(string, 1, string.length);
+                while (num.length < string.length && isdigit(num.data[num.length])) {
                     num.length += 1;
                 }
+                string = ESTD_SLICE(string, num.length, string.length);
                 ret.type = TOKEN_INTEGER;
                 estd_string_to_uint(&ret.integer, num, 10);
             } else {
