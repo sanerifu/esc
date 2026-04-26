@@ -144,7 +144,7 @@ Token lex(EstdString* io_string) {
                 ret = (Token){.type = TOKEN_ID, .id = id};
             } else if (isdigit(string.data[0])) {
                 EstdString num = ESTD_STRING(string.data, 0);
-                while (num.length < string.length && isdigit(num.data[num.length])) {
+                while (num.length < string.length && isalnum(num.data[num.length])) {
                     num.length += 1;
                 }
                 string = ESTD_SLICE(string, num.length, string.length);
