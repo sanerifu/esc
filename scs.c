@@ -7,6 +7,7 @@ struct Token {
     enum {
         TOKEN_EOF,
         TOKEN_UNKNOWN,
+        TOKEN_ERROR,
         TOKEN_ID,
         TOKEN_INTEGER,
         TOKEN_LPAREN,
@@ -14,12 +15,17 @@ struct Token {
         TOKEN_LBRACK,
         TOKEN_RBRACK,
         TOKEN_LBRACE,
-        TOKEN_RBRACE
+        TOKEN_RBRACE,
+        TOKEN_CHARACTERS,
+        TOKEN_STRING
     } type;
     union {
+        EstdString error;
         EstdString id;
         uintmax_t integer;
         char unknown;
+        EstdString characters;
+        EstdString string;
     };
 };
 
@@ -29,7 +35,10 @@ void print_token(Token tok) {
             printf("EOF");
             break;
         case TOKEN_UNKNOWN:
-            printf("Unknown(%c)", tok.unknown);
+            printf("Unknown(%x '%c')", tok.unknown, tok.unknown);
+            break;
+        case TOKEN_ERROR:
+            printf("Unknown(%" PRIestr ")", ESTD_STRING_ARG(tok.error));
             break;
         case TOKEN_ID:
             printf("ID(%" PRIestr ")", ESTD_STRING_ARG(tok.id));
@@ -54,6 +63,12 @@ void print_token(Token tok) {
             break;
         case TOKEN_RBRACE:
             printf("RBRACE");
+            break;
+        case TOKEN_CHARACTERS:
+            printf("CHARACTERS(%" PRIestr ")", ESTD_STRING_ARG(tok.characters));
+            break;
+        case TOKEN_STRING:
+            printf("STRING(%" PRIestr ")", ESTD_STRING_ARG(tok.string));
             break;
     }
 }
@@ -89,6 +104,36 @@ Token lex(EstdString* io_string) {
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_RBRACE};
             break;
+        case '\'': {
+            EstdString lit = ESTD_STRING(string.data, 0);
+            bool is_escaped = false;
+            do {
+                is_escaped = !is_escaped && lit.data[lit.length] == '\\';
+                lit.length += 1;
+            } while (lit.length < string.length && (is_escaped || lit.data[lit.length] != '\''));
+            string = ESTD_SLICE(
+                string,
+                lit.length + (lit.length != string.length ? 1 : 0),
+                string.length
+            );  // ternary handles missing closing quote
+            ret = (Token){.type = TOKEN_CHARACTERS, .characters = ESTD_SLICE(lit, 1, lit.length)};
+            break;
+        }
+        case '\"': {
+            EstdString lit = ESTD_STRING(string.data, 0);
+            bool is_escaped = false;
+            do {
+                is_escaped = !is_escaped && lit.data[lit.length] == '\\';
+                lit.length += 1;
+            } while (lit.length < string.length && (is_escaped || lit.data[lit.length] != '\"'));
+            string = ESTD_SLICE(
+                string,
+                lit.length + (lit.length != string.length ? 1 : 0),
+                string.length
+            );  // ternary handles missing closing quote
+            ret = (Token){.type = TOKEN_STRING, .string = ESTD_SLICE(lit, 1, lit.length)};
+            break;
+        }
         default:
             if (isalpha(string.data[0])) {
                 EstdString id = ESTD_STRING(string.data, 0);
