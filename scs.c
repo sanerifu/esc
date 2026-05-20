@@ -17,6 +17,7 @@ struct Token {
         TOKEN_RBRACK,
         TOKEN_LBRACE,
         TOKEN_RBRACE,
+        TOKEN_SEMICOLON,
         TOKEN_CHARACTERS,
         TOKEN_STRING
     } type;
@@ -68,6 +69,9 @@ void print_token(Token tok) {
         case TOKEN_RBRACE:
             printf("RBRACE");
             break;
+        case TOKEN_SEMICOLON:
+            printf("SEMICOLON");
+            break;
         case TOKEN_CHARACTERS:
             printf("CHARACTERS(%" PRIestr ")", ESTD_STRING_ARG(tok.characters));
             break;
@@ -107,6 +111,10 @@ Token lex(EstdString* io_string) {
         case '}':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_RBRACE};
+            break;
+        case ';':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_SEMICOLON};
             break;
         case '\'': {
             EstdString lit = ESTD_STRING(string.data, 0);

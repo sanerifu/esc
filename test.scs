@@ -1,1 +1,3 @@
-Ty T_ T_T @my_type_t $Init tt_ world
+int foo() {
+    return 0;
+}
