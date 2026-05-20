@@ -9,6 +9,7 @@ struct Token {
         TOKEN_UNKNOWN,
         TOKEN_ERROR,
         TOKEN_ID,
+        TOKEN_TYPEID,
         TOKEN_INTEGER,
         TOKEN_LPAREN,
         TOKEN_RPAREN,
@@ -42,6 +43,9 @@ void print_token(Token tok) {
             break;
         case TOKEN_ID:
             printf("ID(%" PRIestr ")", ESTD_STRING_ARG(tok.id));
+            break;
+        case TOKEN_TYPEID:
+            printf("TYPE(%" PRIestr ")", ESTD_STRING_ARG(tok.id));
             break;
         case TOKEN_INTEGER:
             printf("NUM(%" PRIuMAX ")", tok.integer);
@@ -137,11 +141,22 @@ Token lex(EstdString* io_string) {
         default:
             if (isalpha(string.data[0])) {
                 EstdString id = ESTD_STRING(string.data, 0);
-                while (id.length < string.length && isalnum(id.data[id.length])) {
+                while (id.length < string.length && (isalnum(id.data[id.length]) || id.data[id.length] == '_')) {
                     id.length += 1;
                 }
                 string = ESTD_SLICE(string, id.length, string.length);
                 ret = (Token){.type = TOKEN_ID, .id = id};
+                bool is_constant = id.length > 1;
+                for(size_t i = 1; i < id.length; i++) {
+                    if(islower(id.data[i])) {
+                        is_constant = false;
+                        break;
+                    }
+                }
+                bool is_type = isupper(id.data[0]) && !is_constant;
+                if(is_type) {
+                    ret.type = TOKEN_TYPEID;
+                }
             } else if (isdigit(string.data[0])) {
                 EstdString num = ESTD_STRING(string.data, 0);
                 while (num.length < string.length && isalnum(num.data[num.length])) {
