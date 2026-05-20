@@ -73,7 +73,7 @@ void print_token(Token tok) {
             printf("Unknown(%x '%c')", tok.unknown, tok.unknown);
             break;
         case TOKEN_ERROR:
-            printf("Unknown(%" PRIestr ")", ESTD_STRING_ARG(tok.error));
+            printf("Error(%" PRIestr ")", ESTD_STRING_ARG(tok.error));
             break;
         case TOKEN_ID:
             printf("ID(%" PRIestr ")", ESTD_STRING_ARG(tok.id));
