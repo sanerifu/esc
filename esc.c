@@ -38,6 +38,9 @@ struct Token {
         TOKEN_GREATER_THAN,
         TOKEN_LESS_EQUALS,
         TOKEN_GREATER_EQUALS,
+        TOKEN_AND,
+        TOKEN_OR,
+        TOKEN_TILDE,
         TOKEN_DOT,
         TOKEN_CHARACTERS,
         TOKEN_STRING
@@ -152,6 +155,15 @@ void print_token(Token tok) {
             break;
         case TOKEN_GREATER_EQUALS:
             printf("GREATER_EQUALS");
+            break;
+        case TOKEN_AND:
+            printf("AND");
+            break;
+        case TOKEN_OR:
+            printf("OR");
+            break;
+        case TOKEN_TILDE:
+            printf("TILDE");
             break;
         case TOKEN_DOT:
             printf("DOT");
