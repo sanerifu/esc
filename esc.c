@@ -20,7 +20,7 @@ struct Token {
         TOKEN_SEMICOLON,
         TOKEN_PLUS,
         TOKEN_MINUS,
-        TOKEN_ASTERIKS,
+        TOKEN_ASTERISK,
         TOKEN_SLASH,
         TOKEN_PERCENT,
         TOKEN_AMPERSAND,
@@ -111,8 +111,8 @@ void print_token(Token tok) {
         case TOKEN_MINUS:
             printf("MINUS");
             break;
-        case TOKEN_ASTERIKS:
-            printf("ASTERIKS");
+        case TOKEN_ASTERISK:
+            printf("ASTERISK");
             break;
         case TOKEN_SLASH:
             printf("SLASH");
@@ -276,7 +276,7 @@ Token lex(EstdString* io_string) {
             break;
         case '*':
             string = ESTD_SLICE(string, 1, string.length);
-            ret = (Token){.type = TOKEN_ASTERIKS};
+            ret = (Token){.type = TOKEN_ASTERISK};
             if (string.length > 0 && string.data[0] == '=') {
                 ret.type = TOKEN_MUL_ASSIGN;
                 string = ESTD_SLICE(string, 1, string.length);
