@@ -212,6 +212,102 @@ Token lex(EstdString* io_string) {
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_SEMICOLON};
             break;
+        case '+':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_PLUS};
+            if (string.length > 0 && string.data[0] == '+') {
+                ret.type = TOKEN_INCREMENT;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
+            break;
+        case '-':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_MINUS};
+            if (string.length > 0 && string.data[0] == '-') {
+                ret.type = TOKEN_DECREMENT;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
+            break;
+        case '*':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_ASTERIKS};
+            break;
+        case '/':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_SLASH};
+            break;
+        case '%':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_PERCENT};
+            break;
+        case '^':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_CARET};
+            break;
+        case '!':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_EXCLAMATION};
+            if (string.length > 0 && string.data[0] == '=') {
+                ret.type = TOKEN_NOT_EQUALS;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
+            break;
+        case '?':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_QUESTION};
+            break;
+        case ':':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_COLON};
+            break;
+        case '=':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_ASSIGN};
+            if (string.length > 0 && string.data[0] == '=') {
+                ret.type = TOKEN_EQUALS;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
+            break;
+        case '<':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_LESS_THAN};
+            if (string.length > 0 && string.data[0] == '=') {
+                ret.type = TOKEN_LESS_EQUALS;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
+            break;
+        case '>':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_GREATER_THAN};
+            if (string.length > 0 && string.data[0] == '=') {
+                ret.type = TOKEN_GREATER_EQUALS;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
+            break;
+        case '&':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_AMPERSAND};
+            if (string.length > 0 && string.data[0] == '&') {
+                ret.type = TOKEN_AND;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
+            break;
+        case '|':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_BAR};
+            if (string.length > 0 && string.data[0] == '|') {
+                ret.type = TOKEN_OR;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
+            break;
+        case '~':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_TILDE};
+            break;
+        case '.':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_DOT};
+            break;
         case '\'': {
             EstdString lit = ESTD_STRING(string.data, 0);
             bool is_escaped = false;
