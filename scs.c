@@ -138,6 +138,26 @@ Token lex(EstdString* io_string) {
             ret = (Token){.type = TOKEN_STRING, .string = ESTD_SLICE(lit, 1, lit.length)};
             break;
         }
+        case '@': {
+            string = ESTD_SLICE(string, 1, string.length);
+            EstdString id = ESTD_STRING(string.data, 0);
+            while (id.length < string.length && (isalnum(id.data[id.length]) || id.data[id.length] == '_')) {
+                id.length += 1;
+            }
+            string = ESTD_SLICE(string, id.length, string.length);
+            ret = (Token){.type = TOKEN_TYPEID, .id = id};
+            break;
+        }
+        case '$': {
+            string = ESTD_SLICE(string, 1, string.length);
+            EstdString id = ESTD_STRING(string.data, 0);
+            while (id.length < string.length && (isalnum(id.data[id.length]) || id.data[id.length] == '_')) {
+                id.length += 1;
+            }
+            string = ESTD_SLICE(string, id.length, string.length);
+            ret = (Token){.type = TOKEN_ID, .id = id};
+            break;
+        }
         default:
             if (isalpha(string.data[0])) {
                 EstdString id = ESTD_STRING(string.data, 0);
@@ -147,14 +167,14 @@ Token lex(EstdString* io_string) {
                 string = ESTD_SLICE(string, id.length, string.length);
                 ret = (Token){.type = TOKEN_ID, .id = id};
                 bool is_constant = id.length > 1;
-                for(size_t i = 1; i < id.length; i++) {
-                    if(islower(id.data[i])) {
+                for (size_t i = 1; i < id.length; i++) {
+                    if (islower(id.data[i])) {
                         is_constant = false;
                         break;
                     }
                 }
                 bool is_type = isupper(id.data[0]) && !is_constant;
-                if(is_type) {
+                if (is_type) {
                     ret.type = TOKEN_TYPEID;
                 }
             } else if (isdigit(string.data[0])) {
