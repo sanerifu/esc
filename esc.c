@@ -42,6 +42,7 @@ struct Token {
         TOKEN_OR,
         TOKEN_TILDE,
         TOKEN_DOT,
+        TOKEN_COMMA,
         TOKEN_CHARACTERS,
         TOKEN_STRING
     } type;
@@ -167,6 +168,9 @@ void print_token(Token tok) {
             break;
         case TOKEN_DOT:
             printf("DOT");
+            break;
+        case TOKEN_COMMA:
+            printf("COMMA");
             break;
         case TOKEN_CHARACTERS:
             printf("CHARACTERS(%" PRIestr ")", ESTD_STRING_ARG(tok.characters));
@@ -307,6 +311,10 @@ Token lex(EstdString* io_string) {
         case '.':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_DOT};
+            break;
+        case ',':
+            string = ESTD_SLICE(string, 1, string.length);
+            ret = (Token){.type = TOKEN_COMMA};
             break;
         case '\'': {
             EstdString lit = ESTD_STRING(string.data, 0);
