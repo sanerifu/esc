@@ -30,6 +30,14 @@ struct Token {
         TOKEN_QUESTION,
         TOKEN_COLON,
         TOKEN_ASSIGN,
+        TOKEN_ADD_ASSIGN,
+        TOKEN_SUB_ASSIGN,
+        TOKEN_MUL_ASSIGN,
+        TOKEN_DIV_ASSIGN,
+        TOKEN_MOD_ASSIGN,
+        TOKEN_BAND_ASSIGN,
+        TOKEN_BOR_ASSIGN,
+        TOKEN_XOR_ASSIGN,
         TOKEN_INCREMENT,
         TOKEN_DECREMENT,
         TOKEN_EQUALS,
@@ -133,6 +141,30 @@ void print_token(Token tok) {
         case TOKEN_ASSIGN:
             printf("ASSIGN");
             break;
+        case TOKEN_ADD_ASSIGN:
+            printf("ADD_ASSIGN");
+            break;
+        case TOKEN_SUB_ASSIGN:
+            printf("SUB_ASSIGN");
+            break;
+        case TOKEN_MUL_ASSIGN:
+            printf("MUL_ASSIGN");
+            break;
+        case TOKEN_DIV_ASSIGN:
+            printf("DIV_ASSIGN");
+            break;
+        case TOKEN_MOD_ASSIGN:
+            printf("MOD_ASSIGN");
+            break;
+        case TOKEN_BAND_ASSIGN:
+            printf("BAND_ASSIGN");
+            break;
+        case TOKEN_BOR_ASSIGN:
+            printf("BOR_ASSIGN");
+            break;
+        case TOKEN_XOR_ASSIGN:
+            printf("XOR_ASSIGN");
+            break;
         case TOKEN_INCREMENT:
             printf("INCREMENT");
             break;
@@ -219,34 +251,60 @@ Token lex(EstdString* io_string) {
         case '+':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_PLUS};
-            if (string.length > 0 && string.data[0] == '+') {
-                ret.type = TOKEN_INCREMENT;
-                string = ESTD_SLICE(string, 1, string.length);
+            if (string.length > 0) {
+                if (string.data[0] == '+') {
+                    ret.type = TOKEN_INCREMENT;
+                    string = ESTD_SLICE(string, 1, string.length);
+                } else if (string.data[0] == '=') {
+                    ret.type = TOKEN_ADD_ASSIGN;
+                    string = ESTD_SLICE(string, 1, string.length);
+                }
             }
             break;
         case '-':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_MINUS};
-            if (string.length > 0 && string.data[0] == '-') {
-                ret.type = TOKEN_DECREMENT;
-                string = ESTD_SLICE(string, 1, string.length);
+            if (string.length > 0) {
+                if (string.data[0] == '-') {
+                    ret.type = TOKEN_DECREMENT;
+                    string = ESTD_SLICE(string, 1, string.length);
+                } else if (string.data[0] == '=') {
+                    ret.type = TOKEN_SUB_ASSIGN;
+                    string = ESTD_SLICE(string, 1, string.length);
+                }
             }
             break;
         case '*':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_ASTERIKS};
+            if (string.length > 0 && string.data[0] == '=') {
+                ret.type = TOKEN_MUL_ASSIGN;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
             break;
         case '/':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_SLASH};
+            if (string.length > 0 && string.data[0] == '=') {
+                ret.type = TOKEN_DIV_ASSIGN;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
             break;
         case '%':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_PERCENT};
+            if (string.length > 0 && string.data[0] == '=') {
+                ret.type = TOKEN_MOD_ASSIGN;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
             break;
         case '^':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_CARET};
+            if (string.length > 0 && string.data[0] == '=') {
+                ret.type = TOKEN_XOR_ASSIGN;
+                string = ESTD_SLICE(string, 1, string.length);
+            }
             break;
         case '!':
             string = ESTD_SLICE(string, 1, string.length);
@@ -291,17 +349,27 @@ Token lex(EstdString* io_string) {
         case '&':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_AMPERSAND};
-            if (string.length > 0 && string.data[0] == '&') {
-                ret.type = TOKEN_AND;
-                string = ESTD_SLICE(string, 1, string.length);
+            if (string.length > 0) {
+                if (string.data[0] == '&') {
+                    ret.type = TOKEN_AND;
+                    string = ESTD_SLICE(string, 1, string.length);
+                } else if (string.data[0] == '=') {
+                    ret.type = TOKEN_BAND_ASSIGN;
+                    string = ESTD_SLICE(string, 1, string.length);
+                }
             }
             break;
         case '|':
             string = ESTD_SLICE(string, 1, string.length);
             ret = (Token){.type = TOKEN_BAR};
-            if (string.length > 0 && string.data[0] == '|') {
-                ret.type = TOKEN_OR;
-                string = ESTD_SLICE(string, 1, string.length);
+            if (string.length > 0) {
+                if (string.data[0] == '|') {
+                    ret.type = TOKEN_OR;
+                    string = ESTD_SLICE(string, 1, string.length);
+                } else if (string.data[0] == '=') {
+                    ret.type = TOKEN_BOR_ASSIGN;
+                    string = ESTD_SLICE(string, 1, string.length);
+                }
             }
             break;
         case '~':
