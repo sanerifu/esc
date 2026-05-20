@@ -435,7 +435,7 @@ Token lex(EstdString* io_string) {
             break;
         }
         default:
-            if (isalpha(string.data[0])) {
+            if (isalpha(string.data[0]) || string.data[0] == '_') {
                 EstdString id = ESTD_STRING(string.data, 0);
                 while (id.length < string.length && (isalnum(id.data[id.length]) || id.data[id.length] == '_')) {
                     id.length += 1;

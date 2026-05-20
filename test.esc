@@ -1,4 +1,4 @@
 int foo() {
-    int x = 5;
+    int _x = 5;
     return x;
 }
