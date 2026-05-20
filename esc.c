@@ -18,6 +18,27 @@ struct Token {
         TOKEN_LBRACE,
         TOKEN_RBRACE,
         TOKEN_SEMICOLON,
+        TOKEN_PLUS,
+        TOKEN_MINUS,
+        TOKEN_ASTERIKS,
+        TOKEN_SLASH,
+        TOKEN_PERCENT,
+        TOKEN_AMPERSAND,
+        TOKEN_BAR,
+        TOKEN_CARET,
+        TOKEN_EXCLAMATION,
+        TOKEN_QUESTION,
+        TOKEN_COLON,
+        TOKEN_ASSIGN,
+        TOKEN_INCREMENT,
+        TOKEN_DECREMENT,
+        TOKEN_EQUALS,
+        TOKEN_NOT_EQUALS,
+        TOKEN_LESS_THAN,
+        TOKEN_GREATER_THAN,
+        TOKEN_LESS_EQUALS,
+        TOKEN_GREATER_EQUALS,
+        TOKEN_DOT,
         TOKEN_CHARACTERS,
         TOKEN_STRING
     } type;
@@ -71,6 +92,69 @@ void print_token(Token tok) {
             break;
         case TOKEN_SEMICOLON:
             printf("SEMICOLON");
+            break;
+        case TOKEN_PLUS:
+            printf("PLUS");
+            break;
+        case TOKEN_MINUS:
+            printf("MINUS");
+            break;
+        case TOKEN_ASTERIKS:
+            printf("ASTERIKS");
+            break;
+        case TOKEN_SLASH:
+            printf("SLASH");
+            break;
+        case TOKEN_PERCENT:
+            printf("PERCENT");
+            break;
+        case TOKEN_AMPERSAND:
+            printf("AMPERSAND");
+            break;
+        case TOKEN_BAR:
+            printf("BAR");
+            break;
+        case TOKEN_CARET:
+            printf("CARET");
+            break;
+        case TOKEN_EXCLAMATION:
+            printf("EXCLAMATION");
+            break;
+        case TOKEN_QUESTION:
+            printf("QUESTION");
+            break;
+        case TOKEN_COLON:
+            printf("COLON");
+            break;
+        case TOKEN_ASSIGN:
+            printf("ASSIGN");
+            break;
+        case TOKEN_INCREMENT:
+            printf("INCREMENT");
+            break;
+        case TOKEN_DECREMENT:
+            printf("DECREMENT");
+            break;
+        case TOKEN_EQUALS:
+            printf("EQUALS");
+            break;
+        case TOKEN_NOT_EQUALS:
+            printf("NOT_EQUALS");
+            break;
+        case TOKEN_LESS_THAN:
+            printf("LESS_THAN");
+            break;
+        case TOKEN_GREATER_THAN:
+            printf("GREATER_THAN");
+            break;
+        case TOKEN_LESS_EQUALS:
+            printf("LESS_EQUALS");
+            break;
+        case TOKEN_GREATER_EQUALS:
+            printf("GREATER_EQUALS");
+            break;
+        case TOKEN_DOT:
+            printf("DOT");
             break;
         case TOKEN_CHARACTERS:
             printf("CHARACTERS(%" PRIestr ")", ESTD_STRING_ARG(tok.characters));
