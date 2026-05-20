@@ -460,7 +460,11 @@ Token lex(EstdString* io_string) {
                 }
                 string = ESTD_SLICE(string, num.length, string.length);
                 ret.type = TOKEN_INTEGER;
-                estd_string_to_uint(&ret.integer, num, 10);
+                EstdResult result = estd_string_to_uint(&ret.integer, num, 10);
+                if(result != ESTD_SUCCESS) {
+                    ESTD_TRACE("Could not parse number token \"%" PRIestr "\"", ESTD_STRING_ARG(num));
+                    return (Token){.type = TOKEN_ERROR, .error = ESTD_LITERAL("Invalid Number")};
+                }
             } else {
                 string = ESTD_SLICE(string, 1, string.length);
             }
@@ -472,7 +476,10 @@ Token lex(EstdString* io_string) {
 }
 
 void fcloseWrapper(void* ptr) {
-    fclose(*(FILE**)ptr);
+    FILE* fp = *(FILE**)ptr;
+    if(fp != NULL) {
+        fclose(*(FILE**)ptr);
+    }
 }
 
 int main(int argc, char* argv[]) {
