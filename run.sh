@@ -1,6 +1,6 @@
-#!/usr/bin/sh
+#!/usr/bin/env sh
 
-cc scs.c -o scs -fsanitize=address -fsanitize=leak -g3
+cc scs.c -o scs -fsanitize=address -g3
 
 if [ $? -eq 0 ]; then
     ./scs test.scs
